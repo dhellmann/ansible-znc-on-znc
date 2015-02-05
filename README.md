@@ -129,33 +129,33 @@ Example Playbook
 Including an example of how to use your role (for instance, with
 variables passed in as parameters) is always nice for users too:
 
-  - hosts: znc
-    roles:
-      - znc-on-znc
-    vars:
-      znc_user:
-        name: dhellmann
-        hash: hashhashhash
-        method: SHA256
-        salt: "saltsaltsalt"
-      znc_ident: dhellmann
-      znc_nick: dhellmann
-      znc_quit_msg: disconnecting
-      znc_real_name: Doug Hellmann
-      znc_networks:
-        - name: freenode
-          server_name: chat.freenode.net
-          server_port: 6667
-          server_password: supersecretvalue
-      znc_channels:
-        - "#openstack"
-        - "#openstack-dev"
-        - "#openstack-infra"
-        - "#openstack-meeting"
-        - "#openstack-meeting-3"
-        - "#openstack-meeting-alt"
-        - "#openstack-oslo"
-        - "#wsme"
+    - hosts: znc
+      roles:
+        - znc-on-znc
+      vars:
+        znc_user:
+          name: dhellmann
+          hash: hashhashhash
+          method: SHA256
+          salt: "saltsaltsalt"
+        znc_ident: dhellmann
+        znc_nick: dhellmann
+        znc_quit_msg: disconnecting
+        znc_real_name: Doug Hellmann
+        znc_networks:
+          - name: freenode
+            server_name: chat.freenode.net
+            server_port: 6667
+            server_password: supersecretvalue
+        znc_channels:
+          - "#openstack"
+          - "#openstack-dev"
+          - "#openstack-infra"
+          - "#openstack-meeting"
+          - "#openstack-meeting-3"
+          - "#openstack-meeting-alt"
+          - "#openstack-oslo"
+          - "#wsme"
 
 License
 -------
