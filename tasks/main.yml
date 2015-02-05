@@ -1,7 +1,9 @@
 ---
+
 - name: Add ZNC PPA repository
   sudo: yes
   apt_repository: repo=ppa:teward/znc state=present
+
 - name: Install packages
   apt: name={{item}} state=latest
   sudo: yes
@@ -13,9 +15,40 @@
     - znc-python
     - znc-tcl
     - monit
+
 - name: Make sure monit is running
   service: name=monit state=running enabled=yes
-- name: "Configuration directory"
-  file: path={{znc_config_dir}} state=directory mode=0755
-- name: "Base instance"
-  include: server.yml name=base port={{znc_base_port}}
+
+- name: "Base config directory"
+  file: path={{znc_config_dir}}/base/configs state=directory mode=0755
+
+- name: "Client config directories"
+  file: path={{znc_config_dir}}/{{item.name}}/configs state=directory mode=0755
+  with_items: znc_clients
+
+# based on https://github.com/willshersystems/ansible-znc/blob/master/tasks/ssl.yml
+- name: "Base SSL certificate"
+  command: znc --datadir={{znc_config_dir}}/base --makepem
+  args:
+    creates: "{{znc_config_dir}}/base/znc.pem"
+
+# based on https://github.com/willshersystems/ansible-znc/blob/master/tasks/ssl.yml
+- name: "SSL certificates"
+  command: znc --datadir={{znc_config_dir}}/{{item.name}} --makepem
+  args:
+    creates: "{{znc_config_dir}}/{{item.name}}/znc.pem"
+  with_items: znc_clients
+
+- name: "Base ZNC config file"
+  template: src=znc-base.conf
+            dest={{znc_config_dir}}/{{item.name}}/configs/znc.conf
+            mode=0644
+  with_items:
+    - name: base
+      port: "{{znc_base_port}}"
+
+- name: "Client ZNC config files"
+  template: src=znc-client.conf
+            dest={{znc_config_dir}}/{{item.name}}/configs/znc.conf
+            mode=0644
+  with_items: znc_clients
