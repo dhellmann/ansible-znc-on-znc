@@ -27,94 +27,94 @@ this on to expose the ports configured for each client service.
 Role Variables
 --------------
 
-znc_config_dir
+* znc_config_dir
 
   Base directory for the personal ZNC configuration files. A separate
   subdirectory is created under this path for each server. Must be
   writable by the user running the ZNC services. Must be a full
   path. Defaults to ~/znc.
 
-znc_base_port
+* znc_base_port
 
   The TCP port for the base ZNC server to listen on. Clients do not
   usually connect to this server, so the port doesn't really matter,
   but it's configurable anyway. Defaults to 6666.
 
-znc_max_buffer_size
+* znc_max_buffer_size
 
   The MaxBufferSize for the server.
 
-znc_user
+* znc_user
 
   Dictionary containing credentials to be used to connect to the ZNC
   bouncer. Generate these values using "znc --makepass".
 
-  name
+  * name
 
     The user name.
 
-  hash
+  * hash
 
     The hashed password.
 
-  method
+  * method
 
     The hash encryption method used.
 
-  salt
+  * salt
 
     The salt value used for the encryption.
 
-znc_nick
+* znc_nick
 
   The nickname to use on the IRC server.
 
-znc_alt_nick
+* znc_alt_nick
 
   The alternate nickname to fall back to if znc_nick is
   taken. Defaults to znc_nick + "_".
 
-znc_buffer
+* znc_buffer
 
   The number of lines to buffer. Defaults to 500.
 
-znc_ident
+* znc_ident
 
   The confirmed identity on the IRC service. Frequently this is the
   same as the nick, but multiple nicks can be associated with a single
   identity.
 
-znc_quit_msg
+* znc_quit_msg
 
   Message to use when ZNC shuts down.
 
-znc_real_name
+* znc_real_name
 
   A fuller name than the nick or ident.
 
-znc_networks
+* znc_networks
 
   The IRC networks to connect to. For each network, specify:
 
-  name
+  * name
 
     The unique name of the network. For example, "freenode".
 
-  server_name
+  * server_name
 
     The hostname or IP of the IRC server. For example,
     "chat.freenode.net".
 
-  server_port
+  * server_port
 
     The port on which to connect. For SSL connections, append "+" to
     the port number. For example, "6667" or "6667+".
 
-  server_password
+  * server_password
 
     The password associated with znc_ident on the server.
 
-znc_channels
+* znc_channels
 
   List of names of channels to join by default.
 
