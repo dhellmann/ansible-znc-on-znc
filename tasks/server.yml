@@ -1,2 +1,8 @@
 - name: "{{name}} config directory"
   file: path={{znc_config_dir}}/{{name}}/configs state=directory mode=0755
+# based on https://github.com/willshersystems/ansible-znc/blob/master/tasks/ssl.yml
+- name: "{{name}} SSL certificate"
+  command: znc --datadir={{znc_config_dir}}/{{name}} --makepem
+  args:
+    creates: "{{znc_config_dir}}/{{name}}/znc.pem"
+  sudo: yes
