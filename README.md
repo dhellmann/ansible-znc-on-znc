@@ -1,12 +1,25 @@
-Role Name
-=========
+znc-on-znc
+==========
 
-A brief description of the role goes here.
+This role makes it easy to create a set of connected ZNC bouncer
+instances, so that each IRC client has its own scrollback.
+
+This work is based on the work of Sean Dague and Dan Smith, as
+described in https://dague.net/2014/09/13/my-irc-proxy-setup/
+
+A base ZNC instance is configured to talk to the IRC servers
+upstream. Then separate child servers are created and exposed for
+clients to connect to. Each child server has its own self-signed SSL
+certificate and ZNC configuration file. A monit service is configured
+for each ZNC server to ensure that the bouncer itself stays running.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+You need accounts on whatever IRC server(s) you use.
+
+You will need to manage the firewall settings for the host you run
+this on to expose the ports configured for each client service.
 
 Role Variables
 --------------
