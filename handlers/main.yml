@@ -1,2 +1,4 @@
 ---
-# handlers file for multiznc
+- name: znc-restart-monit
+  service: name=monit state=restarted
+  sudo: yes

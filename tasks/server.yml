@@ -6,3 +6,7 @@
   args:
     creates: "{{znc_config_dir}}/{{name}}/znc.pem"
   sudo: yes
+- name: "{{name}} ZNC config file"
+  template: src=znc.conf
+            dest={{znc_config_dir}}/{{name}}/configs/znc.conf
+            mode=0644

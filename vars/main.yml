@@ -1,3 +1,7 @@
 ---
 znc_config_dir: "{{ansible_env.HOME}}/znc"
 znc_base_port: 6666
+znc_max_buffer_size: 5000
+znc_auto_clear_chan_buffer: "false"
+znc_buffer: 500
+znc_alt_nick: "{{znc_nick}}_"
