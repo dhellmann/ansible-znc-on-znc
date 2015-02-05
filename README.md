@@ -24,6 +24,19 @@ this on to expose the ports configured for each client service.
 Role Variables
 --------------
 
+znc_config_dir
+
+  Base directory for the personal ZNC configuration files. A separate
+  subdirectory is created under this path for each server. Must be
+  writable by the user running the ZNC services. Must be a full
+  path. Defaults to ~/znc.
+
+znc_base_port
+
+  The TCP port for the base ZNC server to listen on. Clients do not
+  usually connect to this server, so the port doesn't really matter,
+  but it's configurable anyway. Defaults to 6666.
+
 A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
 
 Dependencies

@@ -1,2 +1,21 @@
 ---
-# tasks file for multiznc
+- name: Add ZNC PPA repository
+  sudo: yes
+  apt_repository: repo=ppa:teward/znc state=present
+- name: Install packages
+  apt: name={{item}} state=latest
+  sudo: yes
+  with_items:
+    - znc
+    - znc-dbg
+    - znc-dev
+    - znc-perl
+    - znc-python
+    - znc-tcl
+    - monit
+- name: Make sure monit is running
+  service: name=monit state=running enabled=yes
+- name: "Configuration directory"
+  file: path={{znc_config_dir}} state=directory mode=0755
+- name: "Base instance"
+  include: server.yml name=base port={{znc_base_port}}

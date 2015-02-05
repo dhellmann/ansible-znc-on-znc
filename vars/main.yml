@@ -1,2 +1,3 @@
 ---
-# vars file for multiznc
+znc_config_dir: "{{ansible_env.HOME}}/znc"
+znc_base_port: 6666
