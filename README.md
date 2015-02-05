@@ -59,11 +59,16 @@ Role Variables
 
   * method
 
-    The hash encryption method used.
+    The hash encryption method used. Defaults to SHA256.
 
   * salt
 
     The salt value used for the encryption.
+
+  * password
+
+    The unencrypted password value, used to let the child servers
+    connect to the base server.
 
 * znc_nick
 
@@ -138,6 +143,7 @@ variables passed in as parameters) is always nice for users too:
           hash: hashhashhash
           method: SHA256
           salt: "saltsaltsalt"
+		  password: unencryptedpass
         znc_ident: dhellmann
         znc_nick: dhellmann
         znc_quit_msg: disconnecting

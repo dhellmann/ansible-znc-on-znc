@@ -22,7 +22,7 @@
 - name: "Base config directory"
   file: path={{znc_config_dir}}/base/configs state=directory mode=0755
 
-- name: "Client config directories"
+- name: "Child config directories"
   file: path={{znc_config_dir}}/{{item.name}}/configs state=directory mode=0755
   with_items: znc_clients
 
@@ -47,8 +47,8 @@
     - name: base
       port: "{{znc_base_port}}"
 
-- name: "Client ZNC config files"
-  template: src=znc-client.conf
+- name: "Child ZNC config files"
+  template: src=znc-child.conf
             dest={{znc_config_dir}}/{{item.name}}/configs/znc.conf
             mode=0644
   with_items: znc_clients
