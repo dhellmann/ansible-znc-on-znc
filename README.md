@@ -172,3 +172,9 @@ Author Information
 ------------------
 
 Doug Hellmann
+
+
+TODO
+----
+
+* Restart ZNC instances when their configuration files change.

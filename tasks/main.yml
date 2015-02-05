@@ -52,3 +52,20 @@
             dest={{znc_config_dir}}/{{item.name}}/configs/znc.conf
             mode=0644
   with_items: znc_clients
+
+- name: "Base monit config"
+  sudo: yes
+  template: src=znc-monit.conf
+            dest=/etc/monit/conf.d/znc-{{item.name}}.conf
+  notify:
+    - znc-restart-monit
+  with_items:
+    - name: base
+
+- name: "Child monit configs"
+  sudo: yes
+  template: src=znc-monit.conf
+            dest=/etc/monit/conf.d/znc-{{item.name}}.conf
+  notify:
+    - znc-restart-monit
+  with_items: znc_clients
