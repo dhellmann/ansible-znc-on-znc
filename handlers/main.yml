@@ -2,3 +2,7 @@
 - name: znc-restart-monit
   service: name=monit state=restarted
   sudo: yes
+
+- name: restart rinetd
+  service: name=rinetd state=restarted
+  sudo: yes

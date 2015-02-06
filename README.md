@@ -137,15 +137,23 @@ Role Variables
 
     The port on which the client should listen. This port needs to be
     exposed through your firewall. The service runs as the the user
-    ansible is using, so the port shouldn't be privileged. Use rinetd
-    to forward port 443 to 6667, for example, if you want to ensure
-    that the connection will work on networks where 6667 is blocked by
-    default.
+    ansible is using, so the port shouldn't be privileged. (See
+    znc_firewall_bypass_port.)
 
   * buffer
 
     Override znc_buffer for this connection. Optional, defaults to
     value of znc_buffer.
+
+* znc_firewall_bypass_port
+
+  Many corporate and public wifi networks block outgoing connections
+  to "abritrary" or IRC ports. To bypass these, many users configure
+  their IRC bouncer to listen on a port that is more likely to be
+  open, such as 443. Because this playbook configures services to run
+  as a regular non-root user, the services cannot be bound directly to
+  port 443. Instead, this option can be used to specify one port
+  number that should be mapped to 443 using rinetd.
 
 Configuring Your IRC Client
 ---------------------------
@@ -193,6 +201,21 @@ variables passed in as parameters) is always nice for users too:
           - "#openstack-meeting-alt"
           - "#openstack-oslo"
           - "#wsme"
+        znc_firewall_bypass_port: 6672
+        znc_clients:
+          - name: hubert
+            port: 6667
+          - name: lrrr
+            port: 6672
+            auto_clear_chan_buffer: true
+          - name: phone
+            port: 6673
+            buffer: 100
+            auto_clear_chan_buffer: true
+          - name: ipad
+            port: 6677
+            buffer: 100
+            auto_clear_chan_buffer: true
 
 License
 -------

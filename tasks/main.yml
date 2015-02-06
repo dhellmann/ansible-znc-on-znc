@@ -67,3 +67,18 @@
   notify:
     - znc-restart-monit
   with_items: znc_clients
+
+# Use rinetd to bypass firewalls that block regular IRC ports (or
+# arbitrary ports) by connecting *one* client to port 443.
+- name: Install rinetd
+  sudo: yes
+  apt: name=rinetd
+  when: znc_firewall_bypass_port is defined
+- name: Configure rinetd
+  sudo: yes
+  lineinfile: dest=/etc/rinetd.conf
+              insertafter="# bindadress    bindport  connectaddress  connectport"
+              line="0.0.0.0 443 127.0.0.1 {{znc_firewall_bypass_port}}"
+  when: znc_firewall_bypass_port is defined
+  notify:
+    - restart rinetd
