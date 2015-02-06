@@ -123,6 +123,37 @@ Role Variables
 
   List of names of channels to join by default.
 
+* znc_clients
+
+  List of ZNC instances to run for different clients.
+
+  * name
+
+    The name of the client. Avoid spaces and punctuation because the
+    name is used to identify the service and name configuration files
+    and directories.
+
+  * port
+
+    The port on which the client should listen. This port needs to be
+    exposed through your firewall. The service runs as the the user
+    ansible is using, so the port shouldn't be privileged. Use rinetd
+    to forward port 443 to 6667, for example, if you want to ensure
+    that the connection will work on networks where 6667 is blocked by
+    default.
+
+  * buffer
+
+    Override znc_buffer for this connection. Optional, defaults to
+    value of znc_buffer.
+
+Configuring Your IRC Client
+---------------------------
+
+Configure your client to connect to your server using one of the
+settings from the `znc_clients` variable. SSL is always enabled for
+all connections.
+
 Dependencies
 ------------
 
