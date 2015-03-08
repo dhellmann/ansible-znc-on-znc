@@ -44,12 +44,16 @@
   template: src=znc-base.conf
             dest={{znc_config_dir}}/base/configs/znc.conf
             mode=0644
+  notify:
+    - znc-hup-instances
 
 - name: "Child ZNC config files"
   template: src=znc-child.conf
             dest={{znc_config_dir}}/{{item.name}}/configs/znc.conf
             mode=0644
   with_items: znc_clients
+  notify:
+    - znc-hup-instances
 
 - name: "Base monit config"
   sudo: yes

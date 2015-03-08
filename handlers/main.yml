@@ -6,3 +6,6 @@
 - name: restart rinetd
   service: name=rinetd state=restarted
   sudo: yes
+
+- name: znc-hup-instances
+  shell: for f in {{znc_config_dir}}/*/znc.pid; do /bin/kill -HUP `cat $f`; done
