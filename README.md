@@ -83,12 +83,6 @@ Role Variables
 
   The number of lines to buffer. Defaults to 500.
 
-* znc_ident
-
-  The confirmed identity on the IRC service. Frequently this is the
-  same as the nick, but multiple nicks can be associated with a single
-  identity.
-
 * znc_quit_msg
 
   Message to use when ZNC shuts down.
@@ -105,6 +99,12 @@ Role Variables
 
     The unique name of the network. For example, "freenode".
 
+  * ident
+
+    The confirmed identity on the IRC service. Frequently this is the
+    same as the nick, but multiple nicks can be associated with a single
+    identity. (Changed from the single value "znc_ident" as part of 2.x.)
+
   * server_name
 
     The hostname or IP of the IRC server. For example,
@@ -115,9 +115,12 @@ Role Variables
     The port on which to connect. For SSL connections, append "+" to
     the port number. For example, "6667" or "6667+".
 
-  * server_password
+* znc_server_passwords
 
-    The password associated with znc_ident on the server.
+  Mapping of network names to passwords for connecting to them as the
+  confirmed identity in the ident field. Replaces the
+  "server_password" parameter to allow the passwords to be stored
+  separately in a file managed with ansible-vault.
 
 * znc_channels
 
