@@ -16,10 +16,6 @@
     - znc-tcl
     - monit
 
-- name: Make sure monit is running
-  service: name=monit state=running enabled=yes
-  sudo: true
-
 - name: "Base config directory"
   file: path={{znc_config_dir}}/base/configs state=directory mode=0755
 
@@ -54,6 +50,10 @@
   with_items: znc_clients
   notify:
     - znc-hup-instances
+
+- name: Make sure monit is running
+  service: name=monit state=running enabled=yes
+  sudo: true
 
 - name: "Base monit config"
   sudo: yes
