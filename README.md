@@ -180,13 +180,16 @@ variables passed in as parameters) is always nice for users too:
       roles:
         - znc-on-znc
       vars:
+	    # znc_user and znc_server_passwords can go into a vault-encrypted file.
         znc_user:
           name: dhellmann
           hash: hashhashhash
           method: SHA256
           salt: "saltsaltsalt"
 		  password: unencryptedpass
-        znc_ident: dhellmann
+		znc_server_passwords:
+		  freenode: supersecretvalue
+		# The remaining values are safe to leave in the playbook in clear text.
         znc_nick: dhellmann
         znc_quit_msg: disconnecting
         znc_real_name: Doug Hellmann
@@ -194,7 +197,7 @@ variables passed in as parameters) is always nice for users too:
           - name: freenode
             server_name: chat.freenode.net
             server_port: 6667
-            server_password: supersecretvalue
+            ident: dhellmann
         znc_channels:
           - "#openstack"
           - "#openstack-dev"
