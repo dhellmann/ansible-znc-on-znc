@@ -6,3 +6,4 @@ znc_max_buffer_size: 5000
 znc_auto_clear_chan_buffer: "false"
 znc_buffer: 500
 znc_alt_nick: "{{znc_nick}}_"
+znc_client_subscribe_all_channels: true

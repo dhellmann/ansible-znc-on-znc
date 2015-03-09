@@ -91,6 +91,17 @@ Role Variables
 
   A fuller name than the nick or ident.
 
+* znc_client_subscribe_all_channels
+
+  Automatically subscribe each client to all of the registered
+  channels. The benefit of doing this is that the client always has a
+  full scrollback buffer for every channel. The down side is that
+  clients connecting to the service will always see all of those
+  channels as joined, which consumes extra bandwidth on mobile
+  devices. Set to false to let all remote clients control
+  subscriptions. Set per-client to allow different behavior for
+  different clients (see below). Defaults to true.
+
 * znc_networks
 
   The IRC networks to connect to. For each network, specify:
@@ -147,6 +158,12 @@ Role Variables
 
     Override znc_buffer for this connection. Optional, defaults to
     value of znc_buffer.
+
+  * subscribe_all_channels
+
+    Override znc_client_subscribe_all_channels for this
+    connection. Optional, defaults to value of
+    znc_client_subscribe_all_channels.
 
 * znc_firewall_bypass_port
 
@@ -218,10 +235,12 @@ variables passed in as parameters) is always nice for users too:
             port: 6673
             buffer: 100
             auto_clear_chan_buffer: true
+            subscribe_all_channels: false
           - name: ipad
             port: 6677
             buffer: 100
             auto_clear_chan_buffer: true
+            subscribe_all_channels: false
 
 License
 -------
