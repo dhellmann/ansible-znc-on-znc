@@ -189,6 +189,7 @@ variables passed in as parameters) is always nice for users too:
 		  password: unencryptedpass
 		znc_server_passwords:
 		  freenode: supersecretvalue
+		  tech404: evenmoresecretvalue
 		# The remaining values are safe to leave in the playbook in clear text.
         znc_nick: dhellmann
         znc_quit_msg: disconnecting
@@ -198,15 +199,22 @@ variables passed in as parameters) is always nice for users too:
             server_name: chat.freenode.net
             server_port: 6667
             ident: dhellmann
-        znc_channels:
-          - "#openstack"
-          - "#openstack-dev"
-          - "#openstack-infra"
-          - "#openstack-meeting"
-          - "#openstack-meeting-3"
-          - "#openstack-meeting-alt"
-          - "#openstack-oslo"
-          - "#wsme"
+            znc_channels:
+              - "#openstack"
+              - "#openstack-dev"
+              - "#openstack-infra"
+              - "#openstack-meeting"
+              - "#openstack-meeting-3"
+              - "#openstack-meeting-alt"
+              - "#openstack-oslo"
+              - "#wsme"
+          - name: tech404
+            ident: dhellmann
+            server_name: tech404.irc.slack.com
+            server_port: "+6697"
+            channels:
+              - "#python"
+              - "#openstack"
         znc_firewall_bypass_port: 6672
         znc_clients:
           - name: hubert
