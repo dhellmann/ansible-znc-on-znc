@@ -91,6 +91,12 @@ Role Variables
 
   A fuller name than the nick or ident.
 
+* znc_extra_modules
+
+  A list of module names to be added to the base server. For example,
+  include the "log" module to log all conversations and include
+  "webadmin" to enable the web UI.
+
 * znc_networks
 
   The IRC networks to connect to. For each network, specify:
