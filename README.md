@@ -157,7 +157,7 @@ Role Variables
 * znc_firewall_bypass_port
 
   Many corporate and public wifi networks block outgoing connections
-  to "abritrary" or IRC ports. To bypass these, many users configure
+  to "arbitrary" or IRC ports. To bypass these, many users configure
   their IRC bouncer to listen on a port that is more likely to be
   open, such as 443. Because this playbook configures services to run
   as a regular non-root user, the services cannot be bound directly to
