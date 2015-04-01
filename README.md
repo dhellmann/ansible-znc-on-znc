@@ -27,6 +27,16 @@ this on to expose the ports configured for each client service.
 Role Variables
 --------------
 
+* znc_system_user
+
+  User to use on the system to run znc.  By default it will be the same user as
+  what Ansible uses to connect to the system.
+
+* znc_system_group
+
+  Group to use on the system to run znc.  By default it will be the same group
+  as what Ansible uses to connect to the system.
+
 * znc_config_dir
 
   Base directory for the personal ZNC configuration files. A separate
@@ -186,6 +196,13 @@ variables passed in as parameters) is always nice for users too:
       roles:
         - znc-on-znc
       vars:
+        # By default we will run znc as the same user/group Ansible uses to
+        # connect to the system.  If you prefer to specify a different
+        # user/group or if Ansible uses the root user you can specify the
+        # user/group to run znc.  To run znc as the user 'znc' and group 'znc'
+        # uncomment the following two lines:
+        #znc_system_user: znc
+        #znc_system_group: znc
         # znc_user and znc_server_passwords can go into a vault-encrypted file.
         znc_user:
           name: dhellmann
