@@ -157,7 +157,7 @@ Role Variables
 * znc_firewall_bypass_port
 
   Many corporate and public wifi networks block outgoing connections
-  to "abritrary" or IRC ports. To bypass these, many users configure
+  to "arbitrary" or IRC ports. To bypass these, many users configure
   their IRC bouncer to listen on a port that is more likely to be
   open, such as 443. Because this playbook configures services to run
   as a regular non-root user, the services cannot be bound directly to
@@ -186,17 +186,17 @@ variables passed in as parameters) is always nice for users too:
       roles:
         - znc-on-znc
       vars:
-	    # znc_user and znc_server_passwords can go into a vault-encrypted file.
+        # znc_user and znc_server_passwords can go into a vault-encrypted file.
         znc_user:
           name: dhellmann
           hash: hashhashhash
           method: SHA256
           salt: "saltsaltsalt"
-		  password: unencryptedpass
-		znc_server_passwords:
-		  freenode: supersecretvalue
-		  tech404: evenmoresecretvalue
-		# The remaining values are safe to leave in the playbook in clear text.
+          password: unencryptedpass
+        znc_server_passwords:
+          freenode: supersecretvalue
+          tech404: evenmoresecretvalue
+        # The remaining values are safe to leave in the playbook in clear text.
         znc_nick: dhellmann
         znc_quit_msg: disconnecting
         znc_real_name: Doug Hellmann
@@ -205,7 +205,7 @@ variables passed in as parameters) is always nice for users too:
             server_name: chat.freenode.net
             server_port: 6667
             ident: dhellmann
-            znc_channels:
+            channels:
               - "#openstack"
               - "#openstack-dev"
               - "#openstack-infra"
