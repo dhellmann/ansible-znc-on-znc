@@ -51,6 +51,8 @@
 - name: "Base SSL certificate fingerprint"
   shell: cat {{znc_config_dir}}/base/znc.pem | openssl x509 -fingerprint -sha256 | grep Fingerprint= | cut -f2 -d=
   register: znc_base_ssl_fingerprint
+  sudo: yes
+  sudo_user: "{{znc_system_user}}"
 
 # based on https://github.com/willshersystems/ansible-znc/blob/master/tasks/ssl.yml
 - name: "SSL certificates"
