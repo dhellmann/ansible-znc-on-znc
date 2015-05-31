@@ -82,10 +82,6 @@
   sudo: yes
   sudo_user: "{{znc_system_user}}"
 
-- name: Make sure monit is running
-  service: name=monit state=running enabled=yes
-  sudo: yes
-
 - name: "Base monit config"
   sudo: yes
   template: src=znc-monit.conf
@@ -103,6 +99,10 @@
   notify:
     - znc-restart-monit
   with_items: znc_clients
+  sudo: yes
+
+- name: Make sure monit is running
+  service: name=monit state=running enabled=yes
   sudo: yes
 
 # Use rinetd to bypass firewalls that block regular IRC ports (or
