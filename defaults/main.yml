@@ -1,8 +1,8 @@
 ---
 # defaults file for multiznc
 znc_system_user: "{{ansible_env.USER}}"
-znc_system_user_dir: "~{{znc_system_user}}"
 znc_system_group: "{{ansible_env.USER}}"
+znc_system_user_dir: "/home/{{znc_system_user}}"
 znc_config_dir: "{{znc_system_user_dir|expanduser}}/znc"
 znc_base_port: 6666
 znc_max_buffer_size: 5000
