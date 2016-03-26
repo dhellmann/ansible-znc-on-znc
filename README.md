@@ -164,6 +164,16 @@ Role Variables
     Override znc_buffer for this connection. Optional, defaults to
     value of znc_buffer.
 
+  * use_ssl
+
+    Boolean flag to control whether SSL is used. Defaults to true.
+
+  * ssl_protocols
+
+    String passed to the SSLProtocols variable in the ZNC
+    config. Defaults to empty, which does not set the value and uses
+    the default for SSLProtocols.
+
 * znc_firewall_bypass_port
 
   Many corporate and public wifi networks block outgoing connections
