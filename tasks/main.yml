@@ -36,7 +36,7 @@
 
 - name: "Child config directories"
   file: path={{znc_config_dir}}/{{item.name}}/configs state=directory mode=0755
-  with_items: znc_clients
+  with_items: "{{znc_clients}}"
   sudo: yes
   sudo_user: "{{znc_system_user}}"
 
@@ -59,7 +59,7 @@
   command: znc --datadir={{znc_config_dir}}/{{item.name}} --makepem
   args:
     creates: "{{znc_config_dir}}/{{item.name}}/znc.pem"
-  with_items: znc_clients
+  with_items: "{{znc_clients}}"
   sudo: yes
   sudo_user: "{{znc_system_user}}"
 
@@ -76,7 +76,7 @@
   template: src=znc-child.conf
             dest={{znc_config_dir}}/{{item.name}}/configs/znc.conf
             mode=0644
-  with_items: znc_clients
+  with_items: "{{znc_clients}}"
   notify:
     - znc-hup-instances
   sudo: yes
@@ -98,7 +98,7 @@
             dest=/etc/monit/conf.d/znc-{{item.name}}.conf
   notify:
     - znc-restart-monit
-  with_items: znc_clients
+  with_items: "{{znc_clients}}"
   sudo: yes
 
 - name: Make sure monit is running
