@@ -2,7 +2,7 @@
 
 - name: Ensure not installing znc to root user
   fail: msg="Trying to install znc to the root user.  znc refuses to run as root. Please set values for znc_system_user and znc_system_group"
-  when: "'{{znc_system_user}}' == 'root'"s:
+  when: "'{{znc_system_user}}' == 'root'"
 
 - name: Add ZNC PPA repository
   sudo: yes
