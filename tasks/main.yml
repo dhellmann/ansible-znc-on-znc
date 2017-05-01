@@ -7,7 +7,9 @@
 - name: Add ZNC PPA repository
   sudo: yes
   apt_repository: repo=ppa:teward/znc state=present
-
+  tags:
+    - zncinstall
+    
 - name: Install packages
   apt: name={{item}} state=latest
   sudo: yes
@@ -20,7 +22,9 @@
     - znc-tcl
     - openssl
     - monit
-
+  tags:
+    - zncinstall
+    - monitinstall
 # Create the ZNC user if needed
 - name: Create znc group
   group: name={{znc_system_group}}
@@ -28,18 +32,24 @@
 - name: Create znc user
   user: name={{znc_system_user}} group={{znc_system_user}}
   sudo: yes
-
+  tags:
+    - zncconfig
+    
 - name: "Base config directory"
   file: path={{znc_config_dir}}/base/configs state=directory mode=0755
   sudo: yes
   sudo_user: "{{znc_system_user}}"
-
+  tags:
+    - zncconfig
+    
 - name: "Child config directories"
   file: path={{znc_config_dir}}/{{item.name}}/configs state=directory mode=0755
   with_items: "{{znc_clients}}"
   sudo: yes
   sudo_user: "{{znc_system_user}}"
-
+  tags:
+    - zncconfig
+    
 # based on https://github.com/willshersystems/ansible-znc/blob/master/tasks/ssl.yml
 - name: "Base SSL certificate"
   command: znc --datadir={{znc_config_dir}}/base --makepem
@@ -47,12 +57,18 @@
     creates: "{{znc_config_dir}}/base/znc.pem"
   sudo: yes
   sudo_user: "{{znc_system_user}}"
+  tags:
+    - zncconfig
+    - ssl   
 
 - name: "Base SSL certificate fingerprint"
   shell: cat {{znc_config_dir}}/base/znc.pem | openssl x509 -fingerprint -sha256 | grep Fingerprint= | cut -f2 -d=
   register: znc_base_ssl_fingerprint
   sudo: yes
   sudo_user: "{{znc_system_user}}"
+  tags:
+    - zncconfig
+    - ssl    
 
 # based on https://github.com/willshersystems/ansible-znc/blob/master/tasks/ssl.yml
 - name: "SSL certificates"
@@ -62,6 +78,9 @@
   with_items: "{{znc_clients}}"
   sudo: yes
   sudo_user: "{{znc_system_user}}"
+  tags:
+    - zncconfig
+    - ssl    
 
 - name: "Base ZNC config file"
   template: src=znc-base.conf
@@ -71,7 +90,9 @@
     - znc-hup-instances
   sudo: yes
   sudo_user: "{{znc_system_user}}"
-
+  tags:
+    - zncconfig
+    
 - name: "Child ZNC config files"
   template: src=znc-child.conf
             dest={{znc_config_dir}}/{{item.name}}/configs/znc.conf
@@ -81,7 +102,9 @@
     - znc-hup-instances
   sudo: yes
   sudo_user: "{{znc_system_user}}"
-
+  tags:
+    - zncconfig
+    
 - name: "Base monit config"
   sudo: yes
   template: src=znc-monit.conf
@@ -91,7 +114,9 @@
   with_items:
     - name: base
   sudo: yes
-
+  tags:
+    - monitconfig
+    
 - name: "Child monit configs"
   sudo: yes
   template: src=znc-monit.conf
@@ -100,17 +125,24 @@
     - znc-restart-monit
   with_items: "{{znc_clients}}"
   sudo: yes
-
+  tags:
+    - monitconfig
+    
 - name: Make sure monit is running
   service: name=monit state=running enabled=yes
   sudo: yes
-
+  tags:
+    - monitconfig
+    
 # Use rinetd to bypass firewalls that block regular IRC ports (or
 # arbitrary ports) by connecting *one* client to port 443.
 - name: Install rinetd
   sudo: yes
   apt: name=rinetd
   when: znc_firewall_bypass_port is defined
+  tags:
+    - rinetdinstall
+
 - name: Configure rinetd
   sudo: yes
   lineinfile: dest=/etc/rinetd.conf
@@ -119,3 +151,7 @@
   when: znc_firewall_bypass_port is defined
   notify:
     - restart rinetd
+  tags:
+    - rinedtconfig
+    
+
