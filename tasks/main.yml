@@ -2,17 +2,17 @@
 
 - name: Ensure not installing znc to root user
   fail: msg="Trying to install znc to the root user.  znc refuses to run as root. Please set values for znc_system_user and znc_system_group"
-  when: "'{{znc_system_user}}' == 'root'"
+  when: znc_system_user == 'root'
 
 - name: Add ZNC PPA repository
-  sudo: yes
+  become: yes
   apt_repository: repo=ppa:teward/znc state=present
   tags:
     - zncinstall
     
 - name: Install packages
   apt: name={{item}} state=latest
-  sudo: yes
+  become: yes
   with_items:
     - znc
     - znc-dbg
@@ -28,25 +28,25 @@
 # Create the ZNC user if needed
 - name: Create znc group
   group: name={{znc_system_group}}
-  sudo: yes
+  become: yes
 - name: Create znc user
   user: name={{znc_system_user}} group={{znc_system_user}}
-  sudo: yes
+  become: yes
   tags:
     - zncconfig
     
 - name: "Base config directory"
   file: path={{znc_config_dir}}/base/configs state=directory mode=0755
-  sudo: yes
-  sudo_user: "{{znc_system_user}}"
+  become: yes
+  become_user: "{{znc_system_user}}"
   tags:
     - zncconfig
     
 - name: "Child config directories"
   file: path={{znc_config_dir}}/{{item.name}}/configs state=directory mode=0755
   with_items: "{{znc_clients}}"
-  sudo: yes
-  sudo_user: "{{znc_system_user}}"
+  become: yes
+  become_user: "{{znc_system_user}}"
   tags:
     - zncconfig
     
@@ -55,8 +55,8 @@
   command: znc --datadir={{znc_config_dir}}/base --makepem
   args:
     creates: "{{znc_config_dir}}/base/znc.pem"
-  sudo: yes
-  sudo_user: "{{znc_system_user}}"
+  become: yes
+  become_user: "{{znc_system_user}}"
   tags:
     - zncconfig
     - ssl   
@@ -64,8 +64,8 @@
 - name: "Base SSL certificate fingerprint"
   shell: cat {{znc_config_dir}}/base/znc.pem | openssl x509 -fingerprint -sha256 | grep Fingerprint= | cut -f2 -d=
   register: znc_base_ssl_fingerprint
-  sudo: yes
-  sudo_user: "{{znc_system_user}}"
+  become: yes
+  become_user: "{{znc_system_user}}"
   tags:
     - zncconfig
     - ssl    
@@ -76,8 +76,8 @@
   args:
     creates: "{{znc_config_dir}}/{{item.name}}/znc.pem"
   with_items: "{{znc_clients}}"
-  sudo: yes
-  sudo_user: "{{znc_system_user}}"
+  become: yes
+  become_user: "{{znc_system_user}}"
   tags:
     - zncconfig
     - ssl    
@@ -88,8 +88,8 @@
             mode=0644
   notify:
     - znc-hup-instances
-  sudo: yes
-  sudo_user: "{{znc_system_user}}"
+  become: yes
+  become_user: "{{znc_system_user}}"
   tags:
     - zncconfig
     
@@ -100,51 +100,49 @@
   with_items: "{{znc_clients}}"
   notify:
     - znc-hup-instances
-  sudo: yes
-  sudo_user: "{{znc_system_user}}"
+  become: yes
+  become_user: "{{znc_system_user}}"
   tags:
     - zncconfig
     
 - name: "Base monit config"
-  sudo: yes
+  become: yes
   template: src=znc-monit.conf
             dest=/etc/monit/conf.d/znc-{{item.name}}.conf
   notify:
     - znc-restart-monit
   with_items:
     - name: base
-  sudo: yes
   tags:
     - monitconfig
     
 - name: "Child monit configs"
-  sudo: yes
+  become: yes
   template: src=znc-monit.conf
             dest=/etc/monit/conf.d/znc-{{item.name}}.conf
   notify:
     - znc-restart-monit
   with_items: "{{znc_clients}}"
-  sudo: yes
   tags:
     - monitconfig
     
 - name: Make sure monit is running
   service: name=monit state=running enabled=yes
-  sudo: yes
+  become: yes
   tags:
     - monitconfig
     
 # Use rinetd to bypass firewalls that block regular IRC ports (or
 # arbitrary ports) by connecting *one* client to port 443.
 - name: Install rinetd
-  sudo: yes
+  become: yes
   apt: name=rinetd
   when: znc_firewall_bypass_port is defined
   tags:
     - rinetdinstall
 
 - name: Configure rinetd
-  sudo: yes
+  become: yes
   lineinfile: dest=/etc/rinetd.conf
               insertafter="# bindadress    bindport  connectaddress  connectport"
               line="0.0.0.0 443 127.0.0.1 {{znc_firewall_bypass_port}}"
