@@ -1,14 +1,14 @@
 ---
 - name: znc-restart-monit
   service: name=monit state=restarted
-  sudo: yes
+  become: yes
 
 - name: restart rinetd
   service: name=rinetd state=restarted
-  sudo: yes
+  become: yes
 
 - name: znc-hup-instances
   shell: for f in {{znc_config_dir}}/*/znc.pid; do /bin/kill -HUP `cat $f`; done
   ignore_errors: yes
-  sudo: yes
-  sudo_user: "{{znc_system_user}}"
+  become: yes
+  become_user: "{{znc_system_user}}"
