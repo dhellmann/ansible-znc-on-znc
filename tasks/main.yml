@@ -106,7 +106,6 @@
     - zncconfig
     
 - name: "Base monit config"
-  become: yes
   template: src=znc-monit.conf
             dest=/etc/monit/conf.d/znc-{{item.name}}.conf
   notify:
@@ -124,7 +123,6 @@
   notify:
     - znc-restart-monit
   with_items: "{{znc_clients}}"
-  become: yes
   tags:
     - monitconfig
     
