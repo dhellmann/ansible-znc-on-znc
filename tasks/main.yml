@@ -2,7 +2,7 @@
 
 - name: Ensure not installing znc to root user
   fail: msg="Trying to install znc to the root user.  znc refuses to run as root. Please set values for znc_system_user and znc_system_group"
-  when: "'{{znc_system_user}}' == 'root'"
+  when: "'znc_system_user' == 'root'"
 
 - name: Add ZNC PPA repository
   become: yes
@@ -30,7 +30,7 @@
   group: name={{znc_system_group}}
   become: yes
 - name: Create znc user
-  user: name={{znc_system_user}} group={{znc_system_user}}
+  user: name={{znc_system_user}} group={{znc_system_group}}
   become: yes
   tags:
     - zncconfig
@@ -106,7 +106,6 @@
     - zncconfig
     
 - name: "Base monit config"
-  become: yes
   template: src=znc-monit.conf
             dest=/etc/monit/conf.d/znc-{{item.name}}.conf
   notify:
@@ -124,7 +123,6 @@
   notify:
     - znc-restart-monit
   with_items: "{{znc_clients}}"
-  become: yes
   tags:
     - monitconfig
     
