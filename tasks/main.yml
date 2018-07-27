@@ -9,13 +9,13 @@
   apt_repository: repo=ppa:teward/znc state=present
   tags:
     - zncinstall
+  when: ansible_distribution == 'Ubuntu'
     
 - name: Install packages
   apt: name={{item}} state=latest
   become: yes
   with_items:
     - znc
-    - znc-dbg
     - znc-dev
     - znc-perl
     - znc-python
@@ -25,6 +25,17 @@
   tags:
     - zncinstall
     - monitinstall
+
+- name: Install znc-dbg packages
+  apt: name={{item}} state=latest
+  become: yes
+  with_items:
+    - znc-dbg
+  tags:
+    - zncinstall
+    - monitinstall
+  when: ansible_distribution == 'Debian' and ansible_distribution_release == 'stretch'
+
 # Create the ZNC user if needed
 - name: Create znc group
   group: name={{znc_system_group}}
@@ -127,7 +138,7 @@
     - monitconfig
     
 - name: Make sure monit is running
-  service: name=monit state=running enabled=yes
+  service: name=monit state=started enabled=yes
   become: yes
   tags:
     - monitconfig
