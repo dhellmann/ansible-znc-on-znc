@@ -30,7 +30,7 @@
   group: name={{znc_system_group}}
   become: yes
 - name: Create znc user
-  user: name={{znc_system_user}} group={{znc_system_user}}
+  user: name={{znc_system_user}} group={{znc_system_group}}
   become: yes
   tags:
     - zncconfig
