@@ -2,20 +2,20 @@
 
 - name: Ensure not installing znc to root user
   fail: msg="Trying to install znc to the root user.  znc refuses to run as root. Please set values for znc_system_user and znc_system_group"
-  when: "'{{znc_system_user}}' == 'root'"
+  when: "'znc_system_user' == 'root'"
 
 - name: Add ZNC PPA repository
   become: yes
   apt_repository: repo=ppa:teward/znc state=present
   tags:
     - zncinstall
+  when: ansible_distribution == 'Ubuntu'
     
 - name: Install packages
   apt: name={{item}} state=latest
   become: yes
   with_items:
     - znc
-    - znc-dbg
     - znc-dev
     - znc-perl
     - znc-python
@@ -25,12 +25,23 @@
   tags:
     - zncinstall
     - monitinstall
+
+- name: Install znc-dbg packages
+  apt: name={{item}} state=latest
+  become: yes
+  with_items:
+    - znc-dbg
+  tags:
+    - zncinstall
+    - monitinstall
+  when: ansible_distribution == 'Debian' and ansible_distribution_release == 'stretch'
+
 # Create the ZNC user if needed
 - name: Create znc group
   group: name={{znc_system_group}}
   become: yes
 - name: Create znc user
-  user: name={{znc_system_user}} group={{znc_system_user}}
+  user: name={{znc_system_user}} group={{znc_system_group}}
   become: yes
   tags:
     - zncconfig
@@ -106,7 +117,6 @@
     - zncconfig
     
 - name: "Base monit config"
-  become: yes
   template: src=znc-monit.conf
             dest=/etc/monit/conf.d/znc-{{item.name}}.conf
   notify:
@@ -124,12 +134,11 @@
   notify:
     - znc-restart-monit
   with_items: "{{znc_clients}}"
-  become: yes
   tags:
     - monitconfig
     
 - name: Make sure monit is running
-  service: name=monit state=running enabled=yes
+  service: name=monit state=started enabled=yes
   become: yes
   tags:
     - monitconfig
