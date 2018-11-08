@@ -10,18 +10,19 @@
   tags:
     - zncinstall
   when: ansible_distribution == 'Ubuntu'
-    
+
 - name: Install packages
-  apt: name={{item}} state=latest
+  apt:
+    state: latest
+    name:
+      - znc
+      - znc-dev
+      - znc-perl
+      - znc-python
+      - znc-tcl
+      - openssl
+      - monit
   become: yes
-  with_items:
-    - znc
-    - znc-dev
-    - znc-perl
-    - znc-python
-    - znc-tcl
-    - openssl
-    - monit
   tags:
     - zncinstall
     - monitinstall
@@ -45,14 +46,14 @@
   become: yes
   tags:
     - zncconfig
-    
+
 - name: "Base config directory"
   file: path={{znc_config_dir}}/base/configs state=directory mode=0755
   become: yes
   become_user: "{{znc_system_user}}"
   tags:
     - zncconfig
-    
+
 - name: "Child config directories"
   file: path={{znc_config_dir}}/{{item.name}}/configs state=directory mode=0755
   with_items: "{{znc_clients}}"
@@ -60,7 +61,7 @@
   become_user: "{{znc_system_user}}"
   tags:
     - zncconfig
-    
+
 # based on https://github.com/willshersystems/ansible-znc/blob/master/tasks/ssl.yml
 - name: "Base SSL certificate"
   command: znc --datadir={{znc_config_dir}}/base --makepem
@@ -70,7 +71,7 @@
   become_user: "{{znc_system_user}}"
   tags:
     - zncconfig
-    - ssl   
+    - ssl
 
 - name: "Base SSL certificate fingerprint"
   shell: cat {{znc_config_dir}}/base/znc.pem | openssl x509 -fingerprint -sha256 | grep Fingerprint= | cut -f2 -d=
@@ -79,7 +80,7 @@
   become_user: "{{znc_system_user}}"
   tags:
     - zncconfig
-    - ssl    
+    - ssl
 
 # based on https://github.com/willshersystems/ansible-znc/blob/master/tasks/ssl.yml
 - name: "SSL certificates"
@@ -91,7 +92,7 @@
   become_user: "{{znc_system_user}}"
   tags:
     - zncconfig
-    - ssl    
+    - ssl
 
 - name: "Base ZNC config file"
   template: src=znc-base.conf
@@ -103,7 +104,7 @@
   become_user: "{{znc_system_user}}"
   tags:
     - zncconfig
-    
+
 - name: "Child ZNC config files"
   template: src=znc-child.conf
             dest={{znc_config_dir}}/{{item.name}}/configs/znc.conf
@@ -115,7 +116,7 @@
   become_user: "{{znc_system_user}}"
   tags:
     - zncconfig
-    
+
 - name: "Base monit config"
   template: src=znc-monit.conf
             dest=/etc/monit/conf.d/znc-{{item.name}}.conf
@@ -126,7 +127,7 @@
   become: yes
   tags:
     - monitconfig
-    
+
 - name: "Child monit configs"
   become: yes
   template: src=znc-monit.conf
@@ -136,13 +137,13 @@
   with_items: "{{znc_clients}}"
   tags:
     - monitconfig
-    
+
 - name: Make sure monit is running
   service: name=monit state=started enabled=yes
   become: yes
   tags:
     - monitconfig
-    
+
 # Use rinetd to bypass firewalls that block regular IRC ports (or
 # arbitrary ports) by connecting *one* client to port 443.
 - name: Install rinetd
