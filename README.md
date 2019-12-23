@@ -152,12 +152,24 @@ Role Variables
     name is used to identify the service and name configuration files
     and directories.
 
+  * host
+
+    The host/IP on which the client should listen.
+
   * port
 
     The port on which the client should listen. This port needs to be
     exposed through your firewall. The service runs as the the user
     ansible is using, so the port shouldn't be privileged. (See
     znc_firewall_bypass_port.)
+
+  * ipv4
+
+    Enable IPv4. Defaults to true.
+
+  * ipv6
+
+    Enable IPv6. Defaults to false.
 
   * buffer
 
