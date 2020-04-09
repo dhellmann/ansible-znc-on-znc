@@ -12,7 +12,7 @@
   when: ansible_distribution == 'Ubuntu'
 
 - name: Install packages
-  apt:
+  package:
     state: latest
     name:
       - znc
@@ -28,10 +28,11 @@
     - monitinstall
 
 - name: Install znc-dbg packages
-  apt: name={{item}} state=latest
   become: yes
-  with_items:
-    - znc-dbg
+  package:
+    state: latest
+    name:
+      - znc-dbg
   tags:
     - zncinstall
     - monitinstall
