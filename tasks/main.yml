@@ -4,13 +4,6 @@
   fail: msg="Trying to install znc to the root user.  znc refuses to run as root. Please set values for znc_system_user and znc_system_group"
   when: "'znc_system_user' == 'root'"
 
-- name: Add ZNC PPA repository
-  become: yes
-  apt_repository: repo=ppa:teward/znc state=present
-  tags:
-    - zncinstall
-  when: ansible_distribution == 'Ubuntu'
-
 - name: Install packages
   package:
     state: latest
