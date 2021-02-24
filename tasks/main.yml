@@ -75,15 +75,17 @@
     - ssl
 
 - name: "Base SSL certificate fingerprint" # noqa 301
+  become: yes
+  become_user: "{{ znc_system_user }}"
   shell: |
     set -o pipefail
     cat {{ znc_config_dir }}/base/znc.pem \
       | openssl x509 -fingerprint -sha256 \
       | grep Fingerprint= \
       | cut -f2 -d=
+  args:
+    executable: /bin/bash
   register: znc_base_ssl_fingerprint
-  become: yes
-  become_user: "{{ znc_system_user }}"
   tags:
     - zncconfig
     - ssl
